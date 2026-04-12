@@ -1,17 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Slider එකට අනිවාර්යයි
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
+    <div className="App">
+     
+      <Navbar />
       
-    </>
-  )
+     
+      <Home />
+
+      <footer className="bg-dark text-white text-center py-4 mt-5">
+        <p className="mb-0">© 2026 QuickTrip Cars | Dilshan Bandara</p>
+        <p>dilshan@gmail.com</p>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;
