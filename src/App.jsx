@@ -26,6 +26,7 @@ function App() {
 
         <footer className="bg-dark text-white text-center py-4 mt-5">
           <p className="mb-0">© 2026 QuickTrip Cars | Dilshan Bandara</p>
+          <p>dilshan@gmail.com</p>
         </footer>
       </div>
     </Router>
