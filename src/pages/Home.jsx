@@ -39,7 +39,7 @@ const Home = () => {
                         />
                         <div className="carousel-caption d-none d-md-block p-4 bg-dark bg-opacity-50 rounded">
                             <h2 className="display-4 fw-bold">Explore Our Premium Fleet</h2>
-                            <p className="fs-5">Drive your dream car with DriveSelect Rentals.</p>
+                            <p className="fs-5">Drive your dream car with QuickTrip Cars Rentals.</p>
                         </div>
                     </div>
 
@@ -52,7 +52,7 @@ const Home = () => {
                         />
                         <div className="carousel-caption d-none d-md-block p-4 bg-dark bg-opacity-50 rounded">
                             <h2 className="display-4 fw-bold">Power Meets Performance</h2>
-                            <p className="fs-5">Rent the best muscle cars in town.</p>
+                            <p className="fs-5">Rent the best  cars in town.</p>
                         </div>
                     </div>
 
