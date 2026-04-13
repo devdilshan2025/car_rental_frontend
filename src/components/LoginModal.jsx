@@ -7,7 +7,7 @@ const LoginModal = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Logging in with:", { email, password });
-        // Backend එක සම්බන්ධ කළාම මෙතනින් තමයි API call එක යවන්නේ
+        
     };
 
     return (

@@ -7,7 +7,7 @@ const Login = () => {
     const handleLogin = (e) => {
         e.preventDefault();
         console.log("Login Details:", { email, password });
-        // මීළඟ පියවරේදී අපි මෙතනට Backend API එක සම්බන්ධ කරමු
+        
     };
 
     return (

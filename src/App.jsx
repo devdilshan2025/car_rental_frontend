@@ -17,10 +17,10 @@ function App() {
         <LoginModal />
         
         <Routes>
-          {/* Home පේජ් එක */}
+          
           <Route path="/" element={<Home />} />
           
-          {/* Login පේජ් එක */}
+          
           <Route path="/login" element={<Login />} />
         </Routes>
 
