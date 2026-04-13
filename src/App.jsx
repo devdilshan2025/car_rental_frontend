@@ -1,23 +1,34 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'; 
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import Login from './pages/Login';
+import LoginModal from './components/LoginModal';
 
 function App() {
   return (
-    <div className="App">
-     
-      <Navbar />
-      
-     
-      <Home />
+    <Router>
+      <div className="App">
+        <Navbar />
 
-      <footer className="bg-dark text-white text-center py-4 mt-5">
-        <p className="mb-0">© 2026 QuickTrip Cars | Dilshan Bandara</p>
-        <p>dilshan@gmail.com</p>
-      </footer>
-    </div>
+        <LoginModal />
+        
+        <Routes>
+          {/* Home පේජ් එක */}
+          <Route path="/" element={<Home />} />
+          
+          {/* Login පේජ් එක */}
+          <Route path="/login" element={<Login />} />
+        </Routes>
+
+        <footer className="bg-dark text-white text-center py-4 mt-5">
+          <p className="mb-0">© 2026 QuickTrip Cars | Dilshan Bandara</p>
+        </footer>
+      </div>
+    </Router>
   );
 }
 
