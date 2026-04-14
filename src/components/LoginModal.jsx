@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const LoginModal = () => {
-    // UI එක Login සහ Signup අතර මාරු කිරීමට
+    
     const [isLoginView, setIsLoginView] = useState(true);
     
-    // Form Inputs සඳහා States
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -21,32 +21,38 @@ const LoginModal = () => {
 
         try {
             if (isLoginView) {
-                // --- LOGIN LOGIC ---
+                
                 const response = await axios.post(loginUrl, { email, password });
                 
                 if (response.status === 200) {
+                    
+                    localStorage.clear();
+
+                    
                     localStorage.setItem('token', response.data.token);
-                    alert("Login Successfully!");
+                    localStorage.setItem('userId', response.data.userId); 
+                    localStorage.setItem('role', response.data.role);
+
+                    
+                    alert("Login Successful! Your UserId is: " + response.data.userId);
+                    
+                    
                     window.location.reload(); 
                 }
             } else {
-                // --- REGISTER LOGIC ---
+                
                 const newUser = {
                     name: name,
                     email: email,
                     password: password,
-                    role: "CUSTOMER" // Postman එකේ වැඩ කළේ මේක නිසා මේකම පාවිච්චි කරමු
+                    role: "CUSTOMER" 
                 };
-
-                console.log("Sending Register Data:", newUser);
 
                 const response = await axios.post(registerUrl, newUser);
                 
-                // Postman එකේ 200 ආපු නිසා අපි මෙතන check කරන්නේ 200 හෝ 201
                 if (response.status === 200 || response.status === 201) {
                     alert("Registration Successful!");
-                    setIsLoginView(true); // සාර්ථක වුණාම ලොගින් එකට මාරු කරනවා
-                    // Fields ටික clear කරමු
+                    setIsLoginView(true);
                     setName('');
                 }
             }
@@ -55,7 +61,7 @@ const LoginModal = () => {
             if (isLoginView) {
                 alert("Login Invalid! Please check your credentials.");
             } else {
-                alert("Registration Failed! Email might already exist or server error.");
+                alert("Registration Failed! Email might already exist.");
             }
         } finally {
             setLoading(false);
