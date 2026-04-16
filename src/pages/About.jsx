@@ -16,7 +16,7 @@ const About = () => {
                 {/* --- Our Story Section --- */}
                 <div className="row align-items-center mb-5 pb-4">
                     <div className="col-md-6">
-                        <h2 className="text-primary fw-bold mb-4">Our Story</h2>
+                        <h2 className="text-black fw-bold mb-4">Our Story</h2>
                         <p className="text-muted fs-5 lh-base">
                             QuickTrip Cars started with a simple vision: to revolutionize the car rental experience in Sri Lanka. 
                             We realized that finding a reliable, high-quality vehicle at an affordable price was often a hassle. 
