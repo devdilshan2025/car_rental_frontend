@@ -10,6 +10,18 @@ const AdminDashboard = () => {
     const [selectedCar, setSelectedCar] = useState({ brand: '', model: '', dailyRate: '', isAvailable: true });
     const [newCar, setNewCar] = useState({ brand: '', model: '', dailyRate: '', isAvailable: true });
 
+    // 1. පේජ් එක Load වෙද්දී Dark Backdrop එක අයින් කිරීමේ කොටස
+    useEffect(() => {
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(b => b.remove());
+        
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = 'auto';
+        document.body.style.paddingRight = '0px';
+
+        fetchCars();
+    }, []);
+
     const fetchCars = async () => {
         try {
             const response = await axiosInstance.get('/car/get-all');
@@ -21,11 +33,7 @@ const AdminDashboard = () => {
         }
     };
 
-    useEffect(() => {
-        fetchCars();
-    }, []);
-
-    // 1. Delete Function
+    // Delete Function
     const handleDelete = async (carId) => {
         if (window.confirm("Are you sure you want to delete this car?")) {
             try {
@@ -38,7 +46,7 @@ const AdminDashboard = () => {
         }
     };
 
-    // 2. Add Car Function
+    // Add Car Function
     const handleAddCar = async (e) => {
         e.preventDefault();
         try {
@@ -51,7 +59,7 @@ const AdminDashboard = () => {
         }
     };
 
-    // 3. Update Car Function
+    // Update Car Function
     const handleUpdateCar = async (e) => {
         e.preventDefault();
         try {
@@ -121,7 +129,7 @@ const AdminDashboard = () => {
                 <BookingManagement />
             )}
 
-            {/* --- Add Car Modal --- */}
+            {/* --- Modals for Cars --- */}
             <div className="modal fade" id="addCarModal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content rounded-4 border-0 shadow">
@@ -147,7 +155,6 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            {/* --- Edit Car Modal --- */}
             <div className="modal fade" id="editCarModal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content rounded-4 border-0 shadow">
@@ -159,13 +166,10 @@ const AdminDashboard = () => {
                             <div className="modal-body">
                                 <div className="mb-2"><label className="small fw-bold">Brand</label></div>
                                 <input type="text" className="form-control mb-3" value={selectedCar.brand} onChange={(e) => setSelectedCar({...selectedCar, brand: e.target.value})} />
-                                
                                 <div className="mb-2"><label className="small fw-bold">Model</label></div>
                                 <input type="text" className="form-control mb-3" value={selectedCar.model} onChange={(e) => setSelectedCar({...selectedCar, model: e.target.value})} />
-                                
                                 <div className="mb-2"><label className="small fw-bold">Daily Rate</label></div>
                                 <input type="number" className="form-control mb-3" value={selectedCar.dailyRate} onChange={(e) => setSelectedCar({...selectedCar, dailyRate: e.target.value})} />
-                                
                                 <div className="mb-2"><label className="small fw-bold">Status</label></div>
                                 <select className="form-select" value={selectedCar.isAvailable} onChange={(e) => setSelectedCar({...selectedCar, isAvailable: e.target.value === 'true'})}>
                                     <option value="true">Available</option>
@@ -183,24 +187,79 @@ const AdminDashboard = () => {
     );
 };
 
+// --- අලුත් Booking Management Component එක ---
 const BookingManagement = () => {
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchBookings = async () => {
+        try {
+            const response = await axiosInstance.get('/booking/get-all');
+            setBookings(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchBookings();
+    }, []);
+
+    const handleReturn = async (bookingId) => {
+        if (window.confirm("Is the car returned and ready for the next customer?")) {
+            try {
+                await axiosInstance.put(`/booking/return/${bookingId}`);
+                alert("Car returned successfully!");
+                fetchBookings();
+            } catch (error) {
+                console.error("Return error:", error);
+                alert("Failed to process return.");
+            }
+        }
+    };
+
     return (
         <div className="card border-0 shadow-sm p-4 rounded-4">
             <h4 className="fw-bold mb-4">Customer Bookings</h4>
-            <table className="table">
-                <thead className="table-dark">
-                    <tr><th>ID</th><th>Customer</th><th>Car</th><th>Status</th><th>Action</th></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>#BK-1001</td>
-                        <td>Dilshan Bandara</td>
-                        <td>Toyota Allion</td>
-                        <td><span className="badge bg-warning text-dark px-3 rounded-pill">Rented</span></td>
-                        <td><button className="btn btn-sm btn-primary rounded-pill px-3">Mark Available</button></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div className="table-responsive">
+                <table className="table table-hover align-middle">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Customer Name</th>
+                            <th>Car ID</th>
+                            <th>Total Price (LKR)</th>
+                            <th className="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr><td colSpan="5" className="text-center py-4">Loading bookings...</td></tr>
+                        ) : bookings.length > 0 ? (
+                            bookings.map((booking) => (
+                                <tr key={booking.bookingId}>
+                                    <td className="fw-bold">#BK-{booking.bookingId}</td>
+                                    <td>{booking.customerName}</td>
+                                    <td>Car ID: {booking.carId}</td>
+                                    <td>{booking.totalPrice?.toLocaleString()}</td>
+                                    <td className="text-center">
+                                        <button 
+                                            className="btn btn-sm btn-success rounded-pill px-4 shadow-sm"
+                                            onClick={() => handleReturn(booking.bookingId)}
+                                        >
+                                            Mark as Returned
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr><td colSpan="5" className="text-center py-4 text-muted">No active bookings found.</td></tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
