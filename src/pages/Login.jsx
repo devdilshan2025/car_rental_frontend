@@ -17,16 +17,15 @@ const Login = () => {
             });
 
             if (response.data) {
-                // 1. කලින් තිබුණු දත්ත (old tokens) අයින් කිරීම
+                
                 localStorage.clear(); 
 
-                // 2. අලුත් User තොරතුරු සේව් කිරීම
+                
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('userId', response.data.userId);
                 localStorage.setItem('role', response.data.role);
 
-                // 3. කළු පාට Backdrop එක (Darkness) අතින් අයින් කිරීම
-                // Bootstrap Modal එකක් නිසා එන dark layer එක මෙයින් අයින් කරනවා
+                
                 const backdrops = document.getElementsByClassName('modal-backdrop');
                 while (backdrops.length > 0) {
                     backdrops[0].parentNode.removeChild(backdrops[0]);
@@ -34,9 +33,10 @@ const Login = () => {
                 document.body.classList.remove('modal-open');
                 document.body.style.overflow = 'auto';
 
-                alert("Login Successful! Your UserId is: " + response.data.userId); 
                 
-                // 4. Role එක අනුව අදාළ පේජ් එකට යැවීම (Refresh එකක් සහිතව)
+                alert("Login Successful!"); 
+                
+                
                 if (response.data.role === "ADMIN") {
                     window.location.href = "/admin-dashboard";
                 } else {
