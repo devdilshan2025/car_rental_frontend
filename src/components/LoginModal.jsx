@@ -5,7 +5,6 @@ const LoginModal = () => {
     
     const [isLoginView, setIsLoginView] = useState(true);
     
-    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -28,14 +27,12 @@ const LoginModal = () => {
                     
                     localStorage.clear();
 
-                    
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userId', response.data.userId); 
                     localStorage.setItem('role', response.data.role);
 
-                    
-                    alert("Login Successful! Your UserId is: " + response.data.userId);
-                    
+                    // මෙන්න මෙතන මම UserId එක අයින් කළා
+                    alert("Login Successful!");
                     
                     window.location.reload(); 
                 }
