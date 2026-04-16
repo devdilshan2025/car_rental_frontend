@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import LoginModal from './components/LoginModal';
 import About from './pages/About';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/about" element={<About/>} />
+
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
           
           <Route path="/login" element={<Login />} />
         </Routes>
