@@ -7,10 +7,22 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
     
     // Form States
-    const [selectedCar, setSelectedCar] = useState({ brand: '', model: '', dailyRate: '', isAvailable: true });
-    const [newCar, setNewCar] = useState({ brand: '', model: '', dailyRate: '', isAvailable: true });
+    const [selectedCar, setSelectedCar] = useState({ 
+        brand: '', model: '', dailyRate: '', isAvailable: true 
+    });
+    
 
-    // 1. පේජ් එක Load වෙද්දී Dark Backdrop එක අයින් කිරීමේ කොටස
+    const [newCar, setNewCar] = useState({
+        brand: '', 
+        model: '', 
+        dailyRate: '', 
+        carType: '', 
+        seatingCapacity: '', 
+        transmission: '', 
+        fuelType: '', 
+        isAvailable: true 
+    });
+
     useEffect(() => {
         const backdrops = document.querySelectorAll('.modal-backdrop');
         backdrops.forEach(b => b.remove());
@@ -52,7 +64,11 @@ const AdminDashboard = () => {
         try {
             await axiosInstance.post('/car/add', newCar);
             alert("New Car Added!");
-            setNewCar({ brand: '', model: '', dailyRate: '', isAvailable: true });
+            
+            setNewCar({ 
+                brand: '', model: '', dailyRate: '', carType: '', 
+                seatingCapacity: '', transmission: '', fuelType: '', isAvailable: true 
+            });
             fetchCars();
         } catch (error) {
             alert("Failed to add car.");
@@ -129,55 +145,101 @@ const AdminDashboard = () => {
                 <BookingManagement />
             )}
 
-            {/* --- Modals for Cars --- */}
+            
             <div className="modal fade" id="addCarModal" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content rounded-4 border-0 shadow">
-                        <div className="modal-header">
-                            <h5 className="modal-title fw-bold">Add New Car</h5>
+                        <div className="modal-header border-0 pb-0">
+                            <h5 className="modal-title fw-bold">Add New Car to Fleet</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <form onSubmit={handleAddCar}>
-                            <div className="modal-body">
-                                <input type="text" className="form-control mb-3" placeholder="Brand" onChange={(e) => setNewCar({...newCar, brand: e.target.value})} required />
-                                <input type="text" className="form-control mb-3" placeholder="Model" onChange={(e) => setNewCar({...newCar, model: e.target.value})} required />
-                                <input type="number" className="form-control mb-3" placeholder="Daily Rate" onChange={(e) => setNewCar({...newCar, dailyRate: e.target.value})} required />
-                                <select className="form-select" onChange={(e) => setNewCar({...newCar, isAvailable: e.target.value === 'true'})}>
-                                    <option value="true">Available</option>
-                                    <option value="false">Rented</option>
-                                </select>
+                            <div className="modal-body pt-4">
+                                <div className="row">
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Brand</label>
+                                        <input type="text" className="form-control rounded-pill" placeholder="e.g. Toyota" 
+                                            value={newCar.brand} onChange={(e) => setNewCar({...newCar, brand: e.target.value})} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Model</label>
+                                        <input type="text" className="form-control rounded-pill" placeholder="e.g. Vitz" 
+                                            value={newCar.model} onChange={(e) => setNewCar({...newCar, model: e.target.value})} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Car Type</label>
+                                        <input type="text" className="form-control rounded-pill" placeholder="e.g. Hatchback / SUV" 
+                                            value={newCar.carType} onChange={(e) => setNewCar({...newCar, carType: e.target.value})} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Seating Capacity</label>
+                                        <input type="number" className="form-control rounded-pill" placeholder="e.g. 5" 
+                                            value={newCar.seatingCapacity} onChange={(e) => setNewCar({...newCar, seatingCapacity: e.target.value})} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Daily Rate (LKR)</label>
+                                        <input type="number" className="form-control rounded-pill" placeholder="7500" 
+                                            value={newCar.dailyRate} onChange={(e) => setNewCar({...newCar, dailyRate: e.target.value})} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Transmission</label>
+                                        <select className="form-select rounded-pill" value={newCar.transmission} onChange={(e) => setNewCar({...newCar, transmission: e.target.value})} required>
+                                            <option value="">Select Transmission</option>
+                                            <option value="Auto">Auto</option>
+                                            <option value="Manual">Manual</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Fuel Type</label>
+                                        <select className="form-select rounded-pill" value={newCar.fuelType} onChange={(e) => setNewCar({...newCar, fuelType: e.target.value})} required>
+                                            <option value="">Select Fuel Type</option>
+                                            <option value="Petrol">Petrol</option>
+                                            <option value="Diesel">Diesel</option>
+                                            <option value="Hybrid">Hybrid</option>
+                                            <option value="Electric">Electric</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-md-6 mb-3 text-start">
+                                        <label className="form-label small fw-bold">Initial Status</label>
+                                        <select className="form-select rounded-pill" value={newCar.isAvailable} onChange={(e) => setNewCar({...newCar, isAvailable: e.target.value === 'true'})}>
+                                            <option value="true">Available</option>
+                                            <option value="false">Not Available</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div className="modal-footer border-0">
-                                <button type="submit" className="btn btn-success w-100 rounded-pill" data-bs-dismiss="modal">Save Car</button>
+                                <button type="submit" className="btn btn-success w-100 rounded-pill fw-bold py-2 shadow-sm" data-bs-dismiss="modal">Save Car</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
+        
             <div className="modal fade" id="editCarModal" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content rounded-4 border-0 shadow">
-                        <div className="modal-header">
+                        <div className="modal-header border-0">
                             <h5 className="modal-title fw-bold">Edit Car Details</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <form onSubmit={handleUpdateCar}>
                             <div className="modal-body">
-                                <div className="mb-2"><label className="small fw-bold">Brand</label></div>
-                                <input type="text" className="form-control mb-3" value={selectedCar.brand} onChange={(e) => setSelectedCar({...selectedCar, brand: e.target.value})} />
-                                <div className="mb-2"><label className="small fw-bold">Model</label></div>
-                                <input type="text" className="form-control mb-3" value={selectedCar.model} onChange={(e) => setSelectedCar({...selectedCar, model: e.target.value})} />
-                                <div className="mb-2"><label className="small fw-bold">Daily Rate</label></div>
-                                <input type="number" className="form-control mb-3" value={selectedCar.dailyRate} onChange={(e) => setSelectedCar({...selectedCar, dailyRate: e.target.value})} />
-                                <div className="mb-2"><label className="small fw-bold">Status</label></div>
-                                <select className="form-select" value={selectedCar.isAvailable} onChange={(e) => setSelectedCar({...selectedCar, isAvailable: e.target.value === 'true'})}>
+                                <div className="mb-2 text-start"><label className="small fw-bold">Brand</label></div>
+                                <input type="text" className="form-control mb-3 rounded-pill" value={selectedCar.brand} onChange={(e) => setSelectedCar({...selectedCar, brand: e.target.value})} />
+                                <div className="mb-2 text-start"><label className="small fw-bold">Model</label></div>
+                                <input type="text" className="form-control mb-3 rounded-pill" value={selectedCar.model} onChange={(e) => setSelectedCar({...selectedCar, model: e.target.value})} />
+                                <div className="mb-2 text-start"><label className="small fw-bold">Daily Rate</label></div>
+                                <input type="number" className="form-control mb-3 rounded-pill" value={selectedCar.dailyRate} onChange={(e) => setSelectedCar({...selectedCar, dailyRate: e.target.value})} />
+                                <div className="mb-2 text-start"><label className="small fw-bold">Status</label></div>
+                                <select className="form-select rounded-pill" value={selectedCar.isAvailable} onChange={(e) => setSelectedCar({...selectedCar, isAvailable: e.target.value === 'true'})}>
                                     <option value="true">Available</option>
                                     <option value="false">Rented</option>
                                 </select>
                             </div>
                             <div className="modal-footer border-0">
-                                <button type="submit" className="btn btn-primary w-100 rounded-pill" data-bs-dismiss="modal">Update Changes</button>
+                                <button type="submit" className="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm" data-bs-dismiss="modal">Update Changes</button>
                             </div>
                         </form>
                     </div>
@@ -187,7 +249,6 @@ const AdminDashboard = () => {
     );
 };
 
-// --- අලුත් Booking Management Component එක ---
 const BookingManagement = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -210,12 +271,14 @@ const BookingManagement = () => {
     const handleReturn = async (bookingId) => {
         if (window.confirm("Is the car returned and ready for the next customer?")) {
             try {
-                await axiosInstance.put(`/booking/return/${bookingId}`);
-                alert("Car returned successfully!");
-                fetchBookings();
+                const response = await axiosInstance.put(`/booking/return/${bookingId}`);
+                if (response.status === 200) {
+                    alert("Car returned successfully and is now available!");
+                    await fetchBookings(); 
+                }
             } catch (error) {
                 console.error("Return error:", error);
-                alert("Failed to process return.");
+                alert("Failed to process return. Please check backend logs.");
             }
         }
     };
@@ -228,7 +291,7 @@ const BookingManagement = () => {
                     <thead className="table-dark">
                         <tr>
                             <th>Booking ID</th>
-                            <th>Customer Name</th>
+                            <th>Customer ID</th>
                             <th>Car ID</th>
                             <th>Total Price (LKR)</th>
                             <th className="text-center">Action</th>
@@ -240,13 +303,13 @@ const BookingManagement = () => {
                         ) : bookings.length > 0 ? (
                             bookings.map((booking) => (
                                 <tr key={booking.bookingId}>
-                                    <td className="fw-bold">#BK-{booking.bookingId}</td>
-                                    <td>{booking.customerName}</td>
-                                    <td>Car ID: {booking.carId}</td>
+                                    <td className="fw-bold">{booking.bookingId}</td>
+                                    <td>{booking.userId}</td>
+                                    <td>{booking.carId}</td>
                                     <td>{booking.totalPrice?.toLocaleString()}</td>
                                     <td className="text-center">
                                         <button 
-                                            className="btn btn-sm btn-success rounded-pill px-4 shadow-sm"
+                                            className="btn btn-sm btn-success rounded-pill px-4 shadow-sm fw-bold"
                                             onClick={() => handleReturn(booking.bookingId)}
                                         >
                                             Mark as Returned
